@@ -241,7 +241,7 @@
       border: 1px solid rgba(245, 158, 11, 0.25);
     }
 
-    .actions-bar { display: flex; gap: 8px; }
+    .actions-bar { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .btn-secondary {
       background: rgba(255,255,255,0.06);
@@ -405,6 +405,7 @@
       <div class="stats-badge" id="studentCount">0 GM-06 Members</div>
 
       <div class="actions-bar">
+        <button onclick="downloadUpdatedHtml()" class="btn-gold" title="Download updated HTML file to commit to GitHub"><i class="fa-solid fa-code"></i> Download Updated index.html</button>
         <button onclick="exportData()" class="btn-secondary" title="Export Backup File"><i class="fa-solid fa-download"></i> Export JSON</button>
       </div>
     </div>
@@ -416,7 +417,7 @@
   <script>
     let activeLetter = "ALL";
 
-    // 23 PERMANENT EMBEDDED COHORT RECORDS
+    // PERMANENT EMBEDDED COHORT DATASET (23 PROFILES)
     const defaultCohortData = [
       {
         "id": "1785642483191hv79",
@@ -541,7 +542,7 @@
       {
         "id": "1785642676747ibii",
         "name": "Giridharan S",
-        "position": "GM-06 Participant",
+        "position": "Senior IT Executive | Logistics & CFS",
         "linkedin": "https://www.linkedin.com/in/giridharan-s-b7499b127?utm_source=share_via&utm_content=profile&utm_medium=member_android"
       },
       {
@@ -558,7 +559,6 @@
       }
     ];
 
-    // Load dataset from local storage or fall back to defaultCohortData
     function getStudents() {
       const stored = localStorage.getItem("iimv_gm06_pro");
       if (!stored || JSON.parse(stored).length === 0) {
@@ -634,7 +634,7 @@
       if (addedCount > 0) {
         saveStudents(students);
         document.getElementById("bulkLinks").value = "";
-        alert(`Successfully added ${addedCount} new profile(s)!`);
+        alert(`Successfully added ${addedCount} new profile(s)! Remember to click 'Download Updated index.html' and upload it to GitHub to save them permanently for everyone.`);
       } else {
         alert("Profiles are already in the directory.");
       }
@@ -676,7 +676,7 @@
 
           if (addedCount > 0) {
             saveStudents(students);
-            alert(`Successfully imported ${addedCount} profiles from JSON file!`);
+            alert(`Successfully imported ${addedCount} profiles! Remember to click 'Download Updated index.html' and commit it to GitHub.`);
           } else {
             alert("All profiles in the JSON file are already present.");
           }
@@ -687,6 +687,29 @@
       };
 
       reader.readAsText(file);
+    }
+
+    // Function to generate and download an updated index.html file with current profiles embedded
+    function downloadUpdatedHtml() {
+      const students = getStudents();
+      let currentDoc = document.documentElement.outerHTML;
+      
+      const regex = /(const\s+defaultCohortData\s*=\s*)\[[\s\S]*?\];/;
+      const updatedJsonString = JSON.stringify(students, null, 2);
+      
+      if (regex.test(currentDoc)) {
+        const updatedHtml = "<!DOCTYPE html>\n<html lang=\"en\">\n" + currentDoc.replace(regex, `$1${updatedJsonString};`) + "\n</html>";
+        const blob = new Blob([updatedHtml], { type: "text/html" });
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.href = URL.createObjectURL(blob);
+        downloadAnchor.download = "index.html";
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        alert("Downloaded updated index.html! Upload this file to GitHub to save all current profiles permanently for all users across all devices.");
+      } else {
+        alert("Could not update embedded dataset.");
+      }
     }
 
     function getInitials(name) {
