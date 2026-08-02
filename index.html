@@ -385,7 +385,7 @@
 
   <div class="container">
     <header>
-      <!-- GM-06 Badge Logo with Fail-Safe SVG Fallback for GitHub -->
+      <!-- Fail-Safe GM-06 Badge Emblem with SVG Fallback -->
       <img src="IIM-GM06_2.jpg" 
            onerror="if (this.src.indexOf('IIM-GM06.jpg') === -1) { this.src='IIM-GM06.jpg'; } else { this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' rx=\'25\' fill=\'%230b1329\'/><path d=\'M100 35 L160 55 V110 C160 145 100 170 100 170 C100 170 40 145 40 110 V55 Z\' fill=\'%23121c33\' stroke=\'%23f59e0b\' stroke-width=\'4\'/><text x=\'100\' y=\'80\' fill=\'%23f59e0b\' font-size=\'10\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>IIM VISAKHAPATNAM</text><text x=\'100\' y=\'110\' fill=\'%23ffffff\' font-size=\'22\' font-family=\'sans-serif\' font-weight=\'900\' text-anchor=\'middle\'>GM-06</text><text x=\'100\' y=\'130\' fill=\'%23f59e0b\' font-size=\'14\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>STUDENTS</text></svg>'; }" 
            alt="IIM Visakhapatnam GM-06 Logo" 
@@ -436,9 +436,23 @@
   <script>
     let activeLetter = "ALL";
 
+    // Default Cohort Data (pre-loaded so mobile users see the directory automatically)
+    const initialCohortData = [
+      {
+        "id": "101",
+        "name": "Giridharan S",
+        "position": "Senior IT Executive | Logistics & CFS",
+        "linkedin": "https://www.linkedin.com/in/giridharan-s"
+      }
+    ];
+
     function getStudents() {
       const stored = localStorage.getItem("iimv_gm06_pro");
-      return stored ? JSON.parse(stored) : [];
+      if (!stored) {
+        localStorage.setItem("iimv_gm06_pro", JSON.stringify(initialCohortData));
+        return initialCohortData;
+      }
+      return JSON.parse(stored);
     }
 
     function saveStudents(students) {
