@@ -385,7 +385,6 @@
 
   <div class="container">
     <header>
-      <!-- Fail-Safe GM-06 Badge Emblem with SVG Fallback -->
       <img src="IIM-GM06_2.jpg" 
            onerror="if (this.src.indexOf('IIM-GM06.jpg') === -1) { this.src='IIM-GM06.jpg'; } else { this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' rx=\'25\' fill=\'%230b1329\'/><path d=\'M100 35 L160 55 V110 C160 145 100 170 100 170 C100 170 40 145 40 110 V55 Z\' fill=\'%23121c33\' stroke=\'%23f59e0b\' stroke-width=\'4\'/><text x=\'100\' y=\'80\' fill=\'%23f59e0b\' font-size=\'10\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>IIM VISAKHAPATNAM</text><text x=\'100\' y=\'110\' fill=\'%23ffffff\' font-size=\'22\' font-family=\'sans-serif\' font-weight=\'900\' text-anchor=\'middle\'>GM-06</text><text x=\'100\' y=\'130\' fill=\'%23f59e0b\' font-size=\'14\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>STUDENTS</text></svg>'; }" 
            alt="IIM Visakhapatnam GM-06 Logo" 
@@ -400,9 +399,9 @@
     <div class="card-box">
       <h3><i class="fa-brands fa-linkedin"></i> LinkedIn Profiles link</h3>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
-        Paste your raw LinkedIn Profile URLs:
+        Paste raw LinkedIn Profile URLs here to dynamically extract and append new members:
       </p>
-      <textarea id="bulkLinks" rows="4" placeholder=""></textarea>
+      <textarea id="bulkLinks" rows="4" placeholder="https://www.linkedin.com/in/profile-id..."></textarea>
       
       <div class="btn-group">
         <button onclick="importLinkedInLinks()" class="btn-gold"><i class="fa-solid fa-bolt"></i> Process Profiles</button>
@@ -425,7 +424,7 @@
 
       <div class="actions-bar">
         <button onclick="exportData()" class="btn-secondary" title="Export Backup File"><i class="fa-solid fa-download"></i> Export JSON</button>
-        <button onclick="clearAllData()" class="btn-secondary btn-danger" title="Clear All"><i class="fa-solid fa-trash"></i></button>
+        <button onclick="resetToDefaults()" class="btn-secondary btn-danger" title="Reset to Permanent Dataset"><i class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
       </div>
     </div>
 
@@ -436,21 +435,23 @@
   <script>
     let activeLetter = "ALL";
 
-    // Default Cohort Data (pre-loaded so mobile users see the directory automatically)
-    const initialCohortData = [
+    // PASTE YOUR FULL 23 RECORDS HERE INSIDE THIS ARRAY SO IT REMAINS PERMANENT FOR ALL DEVICES
+    const defaultCohortData = [
       {
         "id": "101",
         "name": "Giridharan S",
         "position": "Senior IT Executive | Logistics & CFS",
         "linkedin": "https://www.linkedin.com/in/giridharan-s"
       }
+      /* PASTE THE REST OF YOUR 22 OBJECTS HERE */
     ];
 
+    // Load data with fallback to embedded dataset
     function getStudents() {
       const stored = localStorage.getItem("iimv_gm06_pro");
       if (!stored) {
-        localStorage.setItem("iimv_gm06_pro", JSON.stringify(initialCohortData));
-        return initialCohortData;
+        localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
+        return defaultCohortData;
       }
       return JSON.parse(stored);
     }
@@ -459,6 +460,14 @@
       localStorage.setItem("iimv_gm06_pro", JSON.stringify(students));
       renderAlphabetBar();
       renderDirectory();
+    }
+
+    function resetToDefaults() {
+      if (confirm("Reset directory to the 23 permanent embedded profiles?")) {
+        localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
+        renderAlphabetBar();
+        renderDirectory();
+      }
     }
 
     // Clean URL Parser
@@ -521,12 +530,12 @@
       if (addedCount > 0) {
         saveStudents(students);
         document.getElementById("bulkLinks").value = "";
+        alert(`Successfully added ${addedCount} new profile(s)!`);
       } else {
-        alert("Profiles already imported.");
+        alert("Profiles are already in the directory.");
       }
     }
 
-    // JSON File Upload Handlers
     function triggerJsonUpload() {
       document.getElementById("jsonFileInput").click();
     }
@@ -565,12 +574,12 @@
             saveStudents(students);
             alert(`Successfully imported ${addedCount} profiles from JSON file!`);
           } else {
-            alert("All profiles in the JSON file are already in your directory.");
+            alert("All profiles in the JSON file are already present.");
           }
         } catch (err) {
-          alert("Error reading JSON file. Please ensure it is a valid JSON directory file.");
+          alert("Error reading JSON file.");
         }
-        event.target.value = ""; // Reset input
+        event.target.value = "";
       };
 
       reader.readAsText(file);
@@ -604,14 +613,6 @@
         let students = getStudents();
         students = students.filter(s => s.id !== id);
         saveStudents(students);
-      }
-    }
-
-    function clearAllData() {
-      if (confirm("Are you sure you want to clear all batch profiles?")) {
-        localStorage.removeItem("iimv_gm06_pro");
-        renderAlphabetBar();
-        renderDirectory();
       }
     }
 
