@@ -256,8 +256,6 @@
     }
 
     .btn-secondary:hover { background: rgba(255,255,255,0.12); }
-    .btn-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .btn-danger:hover { background: #ef4444; color: #fff; }
 
     /* Directory Cards */
     .directory-grid {
@@ -357,22 +355,6 @@
 
     .linkedin-btn:hover { background: var(--linkedin-hover); }
 
-    .card-actions { display: flex; gap: 4px; }
-
-    .icon-btn {
-      color: var(--text-muted);
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 0.85rem;
-      padding: 6px 8px;
-      border-radius: 4px;
-      transition: all 0.2s;
-    }
-
-    .icon-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
-    .icon-btn.delete:hover { color: #f87171; background: rgba(239, 68, 68, 0.15); }
-
     .empty-state {
       text-align: center;
       padding: 50px 20px;
@@ -424,7 +406,6 @@
 
       <div class="actions-bar">
         <button onclick="exportData()" class="btn-secondary" title="Export Backup File"><i class="fa-solid fa-download"></i> Export JSON</button>
-        <button onclick="resetToDefaults()" class="btn-secondary btn-danger" title="Reset to Permanent Dataset"><i class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
       </div>
     </div>
 
@@ -593,14 +574,6 @@
       renderDirectory();
     }
 
-    function resetToDefaults() {
-      if (confirm("Reset directory to the 23 permanent embedded profiles?")) {
-        localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
-        renderAlphabetBar();
-        renderDirectory();
-      }
-    }
-
     // Clean URL Parser
     function parseLinkedInURL(url) {
       let cleanUrl = url.trim();
@@ -722,31 +695,6 @@
       return name.slice(0, 2).toUpperCase();
     }
 
-    function editStudent(id) {
-      const students = getStudents();
-      const student = students.find(s => s.id === id);
-      if (!student) return;
-
-      const newName = prompt("Edit Full Name:", student.name);
-      if (newName === null) return;
-
-      const newPosition = prompt("Edit Position / Role:", student.position);
-      if (newPosition === null) return;
-
-      student.name = newName.trim() || student.name;
-      student.position = newPosition.trim() || student.position;
-
-      saveStudents(students);
-    }
-
-    function deleteStudent(id) {
-      if (confirm("Remove profile card?")) {
-        let students = getStudents();
-        students = students.filter(s => s.id !== id);
-        saveStudents(students);
-      }
-    }
-
     function exportData() {
       const students = getStudents();
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students, null, 2));
@@ -819,10 +767,6 @@
             <a href="${escapeHtml(s.linkedin)}" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
               <i class="fa-brands fa-linkedin"></i> LinkedIn Profile
             </a>
-            <div class="card-actions">
-              <button onclick="editStudent('${s.id}')" class="icon-btn" title="Edit Profile"><i class="fa-solid fa-pen"></i></button>
-              <button onclick="deleteStudent('${s.id}')" class="icon-btn delete" title="Delete Profile"><i class="fa-solid fa-trash-can"></i></button>
-            </div>
           </div>
         </div>
       `).join("");
