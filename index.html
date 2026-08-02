@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IIM Visakhapatnam — GM-06 Cohort Directory</title>
+  <title>IIM Visakhapatnam — GM-06 Students Directory</title>
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
@@ -435,21 +435,25 @@
   <script>
     let activeLetter = "ALL";
 
-    // PASTE YOUR FULL 23 RECORDS HERE INSIDE THIS ARRAY SO IT REMAINS PERMANENT FOR ALL DEVICES
+    // =========================================================================
+    // PASTE YOUR 23 JSON OBJECTS INSIDE THIS ARRAY BELOW:
+    // =========================================================================
     const defaultCohortData = [
+      /* Example structure:
       {
-        "id": "101",
-        "name": "Giridharan S",
-        "position": "Senior IT Executive | Logistics & CFS",
-        "linkedin": "https://www.linkedin.com/in/giridharan-s"
-      }
-      /* PASTE THE REST OF YOUR 22 OBJECTS HERE */
+        "id": "1",
+        "name": "Full Name",
+        "position": "Job Title / Role",
+        "linkedin": "https://www.linkedin.com/in/username"
+      },
+      ... PASTE ALL YOUR 23 PROFILE OBJECTS HERE ...
+      */
     ];
 
-    // Load data with fallback to embedded dataset
+    // Load dataset (Pulls from localStorage or falls back to permanent defaultCohortData)
     function getStudents() {
       const stored = localStorage.getItem("iimv_gm06_pro");
-      if (!stored) {
+      if (!stored || JSON.parse(stored).length === 0) {
         localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
         return defaultCohortData;
       }
@@ -463,7 +467,7 @@
     }
 
     function resetToDefaults() {
-      if (confirm("Reset directory to the 23 permanent embedded profiles?")) {
+      if (confirm("Reset directory to the embedded permanent profiles?")) {
         localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
         renderAlphabetBar();
         renderDirectory();
