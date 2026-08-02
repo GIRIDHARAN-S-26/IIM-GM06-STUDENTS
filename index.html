@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IIM Visakhapatnam — GM-06 Students Directory</title>
+  <title>IIM Visakhapatnam — GM-06 Cohort Directory</title>
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
@@ -435,22 +435,149 @@
   <script>
     let activeLetter = "ALL";
 
-    // =========================================================================
-    // PASTE YOUR 23 JSON OBJECTS INSIDE THIS ARRAY BELOW:
-    // =========================================================================
+    // 23 PERMANENT EMBEDDED COHORT RECORDS
     const defaultCohortData = [
-      /* Example structure:
       {
-        "id": "1",
-        "name": "Full Name",
-        "position": "Job Title / Role",
-        "linkedin": "https://www.linkedin.com/in/username"
+        "id": "1785642483191hv79",
+        "name": "Anaparthi Solmanraju",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/anaparthi-solmanraju-9b508698?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
       },
-      ... PASTE ALL YOUR 23 PROFILE OBJECTS HERE ...
-      */
+      {
+        "id": "1785642494465qje4",
+        "name": "Lalita Duggirala",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/lalita-duggirala-168b16285/"
+      },
+      {
+        "id": "1785642501810tru8",
+        "name": "Mridul Madathil",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/mridul-madathil-92401b62?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "17856425088708mv4",
+        "name": "Deepanker Gupta",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/deepanker-gupta-b1343710?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "17856425179698dh4",
+        "name": "Dr Anand",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/dr-anand-pr-a92a2376/"
+      },
+      {
+        "id": "1785642525950px7t",
+        "name": "Amit Shil",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/amit-shil-0651161a1?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642535073maku",
+        "name": "Archana9",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/archana9"
+      },
+      {
+        "id": "1785642545874ggei",
+        "name": "Shravani K",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/shravani-k-670464221"
+      },
+      {
+        "id": "1785642552931dw29",
+        "name": "Bramhanapalli Teja",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/bramhanapalli-teja-b0a59017b?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642559313xfvy",
+        "name": "Polepallynaveen",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/polepallynaveen?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642566129meqc",
+        "name": "Barri Kishore",
+        "position": "Kumar",
+        "linkedin": "https://www.linkedin.com/in/barri-kishore-kumar-3045b115a?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642575834fyhf",
+        "name": "Thakur Sanjaysingh",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/thakur-sanjaysingh-27324a15?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642624482lxot",
+        "name": "Aswin Selva",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/aswin-selva-398655149?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642632478ncao",
+        "name": "Ponnada Venkata",
+        "position": "Rama Satish",
+        "linkedin": "https://www.linkedin.com/in/ponnada-venkata-rama-satish-94b4676b?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642639170qlw2",
+        "name": "B Vivek",
+        "position": "Rao",
+        "linkedin": "https://www.linkedin.com/in/b-vivek-rao/"
+      },
+      {
+        "id": "17856426451744smi",
+        "name": "Kushagra Khare",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/kushagra-khare-1a2910214?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642650699im61",
+        "name": "Akshaya Km",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/akshaya-km-a39860409?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642657211ns9v",
+        "name": "Gobinat Mugesh",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/gobinat-mugesh-7271131a5?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642664048dkh7",
+        "name": "Reshma Bhanu",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/reshma-bhanu?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642669595oom7",
+        "name": "Ca Bikram",
+        "position": "Choudhury",
+        "linkedin": "https://www.linkedin.com/in/ca-bikram-choudhury-61b864aa?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "id": "1785642676747ibii",
+        "name": "Giridharan S",
+        "position": "Senior IT Executive | Logistics & CFS",
+        "linkedin": "https://www.linkedin.com/in/giridharan-s-b7499b127?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      },
+      {
+        "id": "1785642682003s3yd",
+        "name": "Dr Adarsh",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/dr-adarsh-35ab311b7/"
+      },
+      {
+        "id": "1785642689323a9je",
+        "name": "Vishal Bhatiwara",
+        "position": "GM-06 Participant",
+        "linkedin": "https://www.linkedin.com/in/vishal-bhatiwara-213aa5125?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      }
     ];
 
-    // Load dataset (Pulls from localStorage or falls back to permanent defaultCohortData)
+    // Load dataset from local storage or fall back to defaultCohortData
     function getStudents() {
       const stored = localStorage.getItem("iimv_gm06_pro");
       if (!stored || JSON.parse(stored).length === 0) {
@@ -467,7 +594,7 @@
     }
 
     function resetToDefaults() {
-      if (confirm("Reset directory to the embedded permanent profiles?")) {
+      if (confirm("Reset directory to the 23 permanent embedded profiles?")) {
         localStorage.setItem("iimv_gm06_pro", JSON.stringify(defaultCohortData));
         renderAlphabetBar();
         renderDirectory();
