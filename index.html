@@ -367,7 +367,10 @@
 
   <div class="container">
     <header>
-      <img src="IIM-GM06_2.jpg" onerror="if (this.src.indexOf('IIM-GM06.jpg') === -1) { this.src='IIM-GM06.jpg'; } else { this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' rx=\'25\' fill=\'%230b1329\'/><path d=\'M100 35 L160 55 V110 C160 145 100 170 100 170 C100 170 40 145 40 110 V55 Z\' fill=\'%23121c33\' stroke=\'%23f59e0b\' stroke-width=\'4\'/><text x=\'100\' y=\'80\' fill=\'%23f59e0b\' font-size=\'10\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>IIM VISAKHAPATNAM</text><text x=\'100\' y=\'110\' fill=\'%23ffffff\' font-size=\'22\' font-family=\'sans-serif\' font-weight=\'900\' text-anchor=\'middle\'>GM-06</text><text x=\'100\' y=\'130\' fill=\'%23f59e0b\' font-size=\'14\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>STUDENTS</text></svg>'; }" alt="IIM Visakhapatnam GM-06 Logo" class="batch-logo">
+      <img src="IIM-GM06_2.jpg" 
+           onerror="if (this.src.indexOf('IIM-GM06.jpg') === -1) { this.src='IIM-GM06.jpg'; } else { this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' rx=\'25\' fill=\'%230b1329\'/><path d=\'M100 35 L160 55 V110 C160 145 100 170 100 170 C100 170 40 145 40 110 V55 Z\' fill=\'%23121c33\' stroke=\'%23f59e0b\' stroke-width=\'4\'/><text x=\'100\' y=\'80\' fill=\'%23f59e0b\' font-size=\'10\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>IIM VISAKHAPATNAM</text><text x=\'100\' y=\'110\' fill=\'%23ffffff\' font-size=\'22\' font-family=\'sans-serif\' font-weight=\'900\' text-anchor=\'middle\'>GM-06</text><text x=\'100\' y=\'130\' fill=\'%23f59e0b\' font-size=\'14\' font-family=\'sans-serif\' font-weight=\'bold\' text-anchor=\'middle\'>STUDENTS</text></svg>'; }" 
+           alt="IIM Visakhapatnam GM-06 Logo" 
+           class="batch-logo" />
       
       <div class="badge-iimv"><i class="fa-solid fa-shield-halved"></i> Executive Education</div>
       <h1>IIM VISAKHAPATNAM</h1>
@@ -378,14 +381,14 @@
     <div class="card-box">
       <h3><i class="fa-brands fa-linkedin"></i> LinkedIn Profiles link</h3>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
-        Paste raw LinkedIn Profile URLs here to dynamically extract and append new members:
+        Paste raw LinkedIn Profile URLs here to dynamically add members to Google Sheet:
       </p>
       <textarea id="bulkLinks" rows="4" placeholder="https://www.linkedin.com/in/profile-id..."></textarea>
       
       <div class="btn-group">
-        <button onclick="importLinkedInLinks()" class="btn-gold"><i class="fa-solid fa-bolt"></i> Process Profiles</button>
+        <button onclick="importLinkedInLinks()" class="btn-gold" id="btnProcess"><i class="fa-solid fa-bolt"></i> Process Profiles</button>
         <button onclick="triggerJsonUpload()" class="btn-secondary"><i class="fa-solid fa-file-import"></i> Upload JSON File</button>
-        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJsonUpload(event)">
+        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJsonUpload(event)" />
       </div>
     </div>
 
@@ -396,13 +399,12 @@
     <div class="toolbar">
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" oninput="renderDirectory()" placeholder="Search by name or position...">
+        <input type="text" id="searchInput" oninput="renderDirectory()" placeholder="Search by name or position..." />
       </div>
 
-      <div class="stats-badge" id="studentCount">0 GM-06 Members</div>
+      <div class="stats-badge" id="studentCount">Connecting to Google Sheet...</div>
 
       <div class="actions-bar">
-        <button onclick="downloadUpdatedHtml()" class="btn-gold" title="Download updated HTML file to commit to GitHub"><i class="fa-solid fa-code"></i> Download Updated index.html</button>
         <button onclick="exportData()" class="btn-secondary" title="Export Backup File"><i class="fa-solid fa-download"></i> Export JSON</button>
       </div>
     </div>
@@ -413,203 +415,43 @@
 
   <script>
     let activeLetter = "ALL";
+    let loadedStudents = [];
 
-    // PERMANENT EMBEDDED COHORT DATASET (ALL POSITIONS UNIFIED TO 'GM-06 Participant')
-    const defaultCohortData = [
-      {
-        "id": "1785642483191hv79",
-        "name": "Anaparthi Solmanraju",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/anaparthi-solmanraju-9b508698?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642494465qje4",
-        "name": "Lalita Duggirala",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/lalita-duggirala-168b16285/"
-      },
-      {
-        "id": "1785642501810tru8",
-        "name": "Mridul Madathil",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/mridul-madathil-92401b62?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "17856425088708mv4",
-        "name": "Deepanker Gupta",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/deepanker-gupta-b1343710?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "17856425179698dh4",
-        "name": "Dr Anand",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/dr-anand-pr-a92a2376/"
-      },
-      {
-        "id": "1785642525950px7t",
-        "name": "Amit Shil",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/amit-shil-0651161a1?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642535073maku",
-        "name": "Archana9",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/archana9"
-      },
-      {
-        "id": "1785642545874ggei",
-        "name": "Shravani K",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/shravani-k-670464221"
-      },
-      {
-        "id": "1785642552931dw29",
-        "name": "Bramhanapalli Teja",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/bramhanapalli-teja-b0a59017b?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642559313xfvy",
-        "name": "Polepallynaveen",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/polepallynaveen?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642566129meqc",
-        "name": "Barri Kishore",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/barri-kishore-kumar-3045b115a?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642575834fyhf",
-        "name": "Thakur Sanjaysingh",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/thakur-sanjaysingh-27324a15?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642624482lxot",
-        "name": "Aswin Selva",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/aswin-selva-398655149?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642632478ncao",
-        "name": "Ponnada Venkata",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/ponnada-venkata-rama-satish-94b4676b?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642639170qlw2",
-        "name": "B Vivek",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/b-vivek-rao/"
-      },
-      {
-        "id": "17856426451744smi",
-        "name": "Kushagra Khare",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/kushagra-khare-1a2910214?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642650699im61",
-        "name": "Akshaya Km",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/akshaya-km-a39860409?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642657211ns9v",
-        "name": "Gobinat Mugesh",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/gobinat-mugesh-7271131a5?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642664048dkh7",
-        "name": "Reshma Bhanu",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/reshma-bhanu?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642669595oom7",
-        "name": "Ca Bikram",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/ca-bikram-choudhury-61b864aa?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785642676747ibii",
-        "name": "Giridharan S",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/giridharan-s-b7499b127?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785642682003s3yd",
-        "name": "Dr Adarsh",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/dr-adarsh-35ab311b7/"
-      },
-      {
-        "id": "1785642689323a9je",
-        "name": "Vishal Bhatiwara",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/vishal-bhatiwara-213aa5125?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785647110926ujwq",
-        "name": "Sagar Akhil",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/sagar-akhil-mishra-48710697?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-      },
-      {
-        "id": "1785648120038bkjh",
-        "name": "Yogish Prrabhu",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/yogish-prrabhu-8421aa342?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785648132233bnuy",
-        "name": "Y Hemant",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/y-hemant-kumar-finace/"
-      },
-      {
-        "id": "1785653275106z7sm",
-        "name": "Satish Singh",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/satish-singh-811b71114?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-      },
-      {
-        "id": "1785735389977acsb",
-        "name": "Rahul Kambhampati",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/rahul-kambhampati"
-      },
-      {
-        "id": "178573540503337hl",
-        "name": "Kushala M",
-        "position": "GM-06 Participant",
-        "linkedin": "https://www.linkedin.com/in/kushala-m-p-a721896b"
-      }
-    ];
+    // YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxFpzApynrpeqpm2Nex17WvMS0yqEKIRjICkBH8SmVph6G03-ZlchybZbij3kI41NI/exec";
 
-    function getStudents() {
-      // Always enforce GM-06 Participant title for all records
-      const stored = localStorage.getItem("iimv_gm06_pro");
-      let list = defaultCohortData;
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
-        } catch(e){}
+    // Fetch live cohort data directly from Google Sheet
+    async function loadDataFromSheet() {
+      try {
+        const response = await fetch(GOOGLE_SHEET_API_URL);
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          loadedStudents = data.map(s => ({ ...s, position: "GM-06 Participant" }));
+          localStorage.setItem("iimv_gm06_pro", JSON.stringify(loadedStudents));
+          return loadedStudents;
+        }
+      } catch (err) {
+        console.error("Failed to load from Google Sheet, loading cached local data:", err);
       }
-      return list.map(s => ({ ...s, position: "GM-06 Participant" }));
+      return getLocalStudents();
     }
 
-    function saveStudents(students) {
-      const updated = students.map(s => ({ ...s, position: "GM-06 Participant" }));
-      localStorage.setItem("iimv_gm06_pro", JSON.stringify(updated));
-      renderAlphabetBar();
-      renderDirectory();
+    function getLocalStudents() {
+      const stored = localStorage.getItem("iimv_gm06_pro");
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    async function sendDataToSheet(newItems) {
+      try {
+        await fetch(GOOGLE_SHEET_API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newItems)
+        });
+      } catch (err) {
+        console.error("Error saving to Google Sheet:", err);
+      }
     }
 
     // Clean URL Parser
@@ -637,82 +479,103 @@
       return { name, position, linkedin: cleanUrl };
     }
 
-    function importLinkedInLinks() {
+    async function importLinkedInLinks() {
       const text = document.getElementById("bulkLinks").value.trim();
       if (!text) return;
+
+      const btn = document.getElementById("btnProcess");
+      btn.innerText = "Processing & Syncing...";
+      btn.disabled = true;
 
       const urlRegex = /(https?:\/\/(?:www\.)?linkedin\.com\/in\/[^\s\n,]+|www\.linkedin\.com\/in\/[^\s\n,]+|linkedin\.com\/in\/[^\s\n,]+)/gi;
       const foundUrls = text.match(urlRegex);
 
       if (!foundUrls || foundUrls.length === 0) {
         alert("No valid LinkedIn URLs detected.");
+        btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Process Profiles';
+        btn.disabled = false;
         return;
       }
 
-      const students = getStudents();
-      let addedCount = 0;
+      const students = loadedStudents;
+      let newItems = [];
 
       foundUrls.forEach(url => {
         let parsed = parseLinkedInURL(url);
         if (!students.some(s => s.linkedin.toLowerCase() === parsed.linkedin.toLowerCase())) {
-          students.push({
+          let item = {
             id: Date.now().toString() + Math.random().toString(36).substr(2, 4),
             name: parsed.name,
             position: "GM-06 Participant",
             linkedin: parsed.linkedin
-          });
-          addedCount++;
+          };
+          students.push(item);
+          newItems.push(item);
         }
       });
 
-      if (addedCount > 0) {
-        saveStudents(students);
+      if (newItems.length > 0) {
+        // Save locally for instant rendering
+        localStorage.setItem("iimv_gm06_pro", JSON.stringify(students));
+        
+        // Sync to Google Sheet database
+        await sendDataToSheet(newItems);
+        
         document.getElementById("bulkLinks").value = "";
-        alert(`Successfully added ${addedCount} new profile(s)! Remember to click 'Download Updated index.html' and upload it to GitHub to save them permanently for everyone.`);
+        alert(`Successfully added ${newItems.length} new profile(s) to the Google Sheet!`);
+        renderAlphabetBar();
+        renderDirectory();
       } else {
-        alert("Profiles are already in the directory.");
+        alert("Profiles are already present in the directory.");
       }
+
+      btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Process Profiles';
+      btn.disabled = false;
     }
 
     function triggerJsonUpload() {
       document.getElementById("jsonFileInput").click();
     }
 
-    function handleJsonUpload(event) {
+    async function handleJsonUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         try {
           const importedData = JSON.parse(e.target.result);
           if (!Array.isArray(importedData)) {
-            alert("Invalid JSON format. Expected an array of profile objects.");
+            alert("Invalid JSON format.");
             return;
           }
 
-          const students = getStudents();
-          let addedCount = 0;
+          const students = loadedStudents;
+          let newItems = [];
 
           importedData.forEach(item => {
             if (item.name && item.linkedin) {
               if (!students.some(s => s.linkedin.toLowerCase() === item.linkedin.toLowerCase())) {
-                students.push({
+                let newItem = {
                   id: item.id || (Date.now().toString() + Math.random().toString(36).substr(2, 4)),
                   name: item.name,
                   position: "GM-06 Participant",
                   linkedin: item.linkedin.startsWith("http") ? item.linkedin : "https://" + item.linkedin
-                });
-                addedCount++;
+                };
+                students.push(newItem);
+                newItems.push(newItem);
               }
             }
           });
 
-          if (addedCount > 0) {
-            saveStudents(students);
-            alert(`Successfully imported ${addedCount} profiles! Remember to click 'Download Updated index.html' and commit it to GitHub.`);
+          if (newItems.length > 0) {
+            localStorage.setItem("iimv_gm06_pro", JSON.stringify(students));
+            await sendDataToSheet(newItems);
+            alert(`Successfully imported and synced ${newItems.length} profile(s) to Google Sheet!`);
+            renderAlphabetBar();
+            renderDirectory();
           } else {
-            alert("All profiles in the JSON file are already present.");
+            alert("All profiles in the file are already present.");
           }
         } catch (err) {
           alert("Error reading JSON file.");
@@ -723,28 +586,6 @@
       reader.readAsText(file);
     }
 
-    function downloadUpdatedHtml() {
-      const students = getStudents().map(s => ({ ...s, position: "GM-06 Participant" }));
-      let currentDoc = document.documentElement.outerHTML;
-      
-      const regex = /(const\s+defaultCohortData\s*=\s*)\[[\s\S]*?\];/;
-      const updatedJsonString = JSON.stringify(students, null, 2);
-      
-      if (regex.test(currentDoc)) {
-        const updatedHtml = "<!DOCTYPE html>\n<html lang=\"en\">\n" + currentDoc.replace(regex, `$1${updatedJsonString};`) + "\n</html>";
-        const blob = new Blob([updatedHtml], { type: "text/html" });
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.href = URL.createObjectURL(blob);
-        downloadAnchor.download = "index.html";
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        alert("Downloaded updated index.html! Upload this file to GitHub to save all current profiles permanently for all users across all devices.");
-      } else {
-        alert("Could not update embedded dataset.");
-      }
-    }
-
     function getInitials(name) {
       let parts = name.split(" ");
       if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -752,8 +593,7 @@
     }
 
     function exportData() {
-      const students = getStudents();
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students, null, 2));
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loadedStudents, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
       downloadAnchor.setAttribute("download", "iimv_gm06_directory.json");
@@ -782,7 +622,7 @@
     function renderDirectory() {
       const grid = document.getElementById("directoryGrid");
       const query = document.getElementById("searchInput").value.toLowerCase();
-      let students = getStudents();
+      let students = loadedStudents;
 
       students.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
@@ -832,8 +672,9 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       renderAlphabetBar();
+      await loadDataFromSheet();
       renderDirectory();
     });
   </script>
